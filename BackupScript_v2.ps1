@@ -31,6 +31,9 @@
 
 #Variables, only Change here
 $Destination = "C:\temp\_Backup" #Copy the Files to this Location
+$FolderPrefix = "Backup-" #Prepend this to the destination folder name
+$DateFormat = "yyyyMMdd-hhmm" #How to format the destination folder datetime portion
+$FolderSuffix = (Get-Random -Maximum 100000) #Append this to the destination folder name
 
 $Versions = "3" #How many of the last Backups you want to keep
 $Backupdirs = "C:\Source1", "C:\Source2" #What Folders you want to backup
@@ -100,7 +103,7 @@ Write-au2matorLog -Type Info -Text "Create Backup Dirs and Check all Folders an 
 
 try {
     #Create Backup Dir
-    $BackupDestination = $Destination + "\Backup-" + (Get-Date -format yyyy-MM-dd) + "-" + (Get-Random -Maximum 100000) + "\"
+    $BackupDestination = $Destination + "\" + $FolderPrefix + (Get-Date -format $DateFormat) + $FolderSuffix + "\"
     New-Item -Path $BackupDestination -ItemType Directory | Out-Null
     Start-sleep -Seconds 5
     Write-au2matorLog -Type Info -Text "Create Backupdir $BackupDestination"
@@ -365,4 +368,4 @@ if ($CountZip -gt $Versions) {
     
     $Zip.FullName | Remove-Item -Recurse -Force 
 
-}
+} 
